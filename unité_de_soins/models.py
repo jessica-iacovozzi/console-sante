@@ -51,8 +51,8 @@ class DossierMédical(models.Model):
     INCONTINENCE_CHOIX = [
         ('sèche', 'Sèche'),
         ('humide', 'Humide'),
-        ('peu', '<1/2 plein'),
-        ('beaucoup', '>1/2 plein'),
+        ('<1/2 plein', '<½ plein'),
+        ('>1/2 plein', '>½ plein'),
         ('changer', 'Changer'),
     ]
 
