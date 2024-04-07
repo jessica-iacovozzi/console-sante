@@ -31,15 +31,15 @@ class Adresse(models.Model):
         ordering = ['rue', 'numéro_de_rue']
 
 class Patient(models.Model):
-    nom = models.CharField(max_length=50)
-    prénom = models.CharField(max_length=50)
+    nom = models.CharField(max_length=60)
+    prénom = models.CharField(max_length=60)
     adresse = models.ForeignKey(Adresse, on_delete=models.PROTECT)
-    courriel = models.EmailField(unique=True, max_length=254)
-    téléphone_maison = models.CharField(max_length=255)
-    téléphone_cellulaire = models.CharField(max_length=255)
-    télécopieur = models.CharField(max_length=255)
+    courriel = models.EmailField(max_length=254, unique=True)
+    téléphone_maison = models.CharField(max_length=12, null=True, blank=True)
+    téléphone_cellulaire = models.CharField(max_length=12, null=True, blank=True)
+    télécopieur = models.CharField(max_length=12, null=True, blank=True)
     date_de_naissance = models.DateField(auto_now=False)
-    ramq = models.CharField(max_length=14)
+    ramq = models.CharField(max_length=14, unique=True)
 
     def __str__(self):
         return f'{self.prénom} {self.nom}'
@@ -64,8 +64,8 @@ class DossierMédical(models.Model):
         ('pas de suivi', 'Pas de suivi'),
     ]
 
-    id_dossier = models.CharField(max_length=24)
-    chambre = models.CharField(max_length=6)
+    id_dossier = models.CharField(max_length=24, unique=True)
+    chambre = models.CharField(max_length=6, unique=True)
     incontinence = models.CharField(max_length=11, choices=INCONTINENCE_CHOIX)
     détection_chute = models.CharField(max_length=14, choices=STATUT)
     amnamèse_ic = models.CharField(max_length=14, choices=STATUT)
@@ -79,7 +79,7 @@ class DossierMédical(models.Model):
     poids = models.DecimalField(max_digits=5, decimal_places=2)
     date_créé = models.DateTimeField(auto_now_add=True)
     dernier_changement = models.DateTimeField(auto_now=True)
-    patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE, unique=True)
 
     def __str__(self):
         return self.chambre
@@ -104,7 +104,7 @@ class PersonnelSoignant(models.Model):
         "PSY": "Psychologue"
     }
 
-    EIN = models.CharField(max_length=255)
+    EIN = models.CharField(max_length=255, unique=True)
     nom = models.CharField(max_length=50)
     prénom = models.CharField(max_length=50)
     photo = models.ImageField()
