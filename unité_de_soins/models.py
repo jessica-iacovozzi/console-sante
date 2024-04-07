@@ -47,7 +47,6 @@ class Patient(models.Model):
     class Meta:
         ordering = ['nom', 'prénom']
 
-
 class DossierMédical(models.Model):
     INCONTINENCE_CHOIX = [
         ('sèche', 'Sèche'),
@@ -87,6 +86,7 @@ class DossierMédical(models.Model):
 
     class Meta:
         ordering = ['chambre']
+        verbose_name_plural = "Dossier médicaux"
 
 class PersonnelSoignant(models.Model):
     ROLES = {
@@ -118,3 +118,4 @@ class PersonnelSoignant(models.Model):
 
     class Meta:
         ordering = ['nom', 'prénom']
+        verbose_name_plural = "Personnel soignant"
