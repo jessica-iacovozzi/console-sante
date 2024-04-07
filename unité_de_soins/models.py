@@ -75,9 +75,9 @@ class DossierMédical(models.Model):
     température_corporelle = models.CharField(max_length=14, choices=STATUT)
     fréquence_respiratoire = models.CharField(max_length=14, choices=STATUT)
     adhérence_rx = models.CharField(max_length=14, choices=STATUT)
-    grandeur = models.DecimalField(max_digits=5, decimal_places=2)
+    taille = models.DecimalField(max_digits=5, decimal_places=2)
     poids = models.DecimalField(max_digits=5, decimal_places=2)
-    date_création = models.DateTimeField(auto_now_add=True)
+    date_créé = models.DateTimeField(auto_now_add=True)
     dernier_changement = models.DateTimeField(auto_now=True)
     patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
 

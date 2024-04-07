@@ -16,7 +16,7 @@ class PatientAdmin(admin.ModelAdmin):
 
 @admin.register(models.DossierMédical)
 class DossierMédicalAdmin(admin.ModelAdmin):
-    list_display = ['id_dossier', 'chambre', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'poids', 'grandeur', 'dernier_changement', 'patient']
+    list_display = ['id_dossier', 'chambre', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'poids', 'taille', 'dernier_changement', 'patient']
     autocomplete_fields = ['patient']
     search_fields = ['id_dossier__istartswith']
 
