@@ -85,7 +85,7 @@ class DossierMédical(models.Model):
         return self.chambre
 
     class Meta:
-        ordering = ['chambre']
+        ordering = ['id_dossier']
         verbose_name_plural = "Dossier médicaux"
 
 class PersonnelSoignant(models.Model):
