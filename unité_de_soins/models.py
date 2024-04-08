@@ -65,7 +65,7 @@ class DossierMédical(models.Model):
     ]
 
     id_dossier = models.CharField(max_length=24, unique=True)
-    chambre = models.CharField(max_length=6, unique=True)
+    chambre = models.CharField(max_length=5)
     incontinence = models.CharField(max_length=11, choices=INCONTINENCE_CHOIX)
     détection_chute = models.CharField(max_length=14, choices=STATUT)
     amnamèse_ic = models.CharField(max_length=14, choices=STATUT)
