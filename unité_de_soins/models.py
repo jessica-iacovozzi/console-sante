@@ -25,7 +25,7 @@ class Adresse(models.Model):
     province = models.CharField(max_length=2, choices=PROVINCE_CHOIX)
 
     def __str__(self):
-        return f'{self.numéro_de_rue} {self.rue}'
+        return f'{self.numéro_de_rue} {self.rue}, {self.ville}, {self.code_postal}, {self.province}'
 
     class Meta:
         ordering = ['rue', 'numéro_de_rue']

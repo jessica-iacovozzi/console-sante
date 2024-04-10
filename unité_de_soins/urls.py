@@ -3,6 +3,9 @@ from . import views
 
 urlpatterns = [
     path('dossiers/', views.dossiers_médicaux),
-    path('dossier/<int:id>/', views.dossier_médical),
-    path('patients/<int:pk>/', views.détails_patient, name='détails_patient')
+    path('dossiers/<int:id>/', views.dossier_médical),
+    path('patients/', views.patients),
+    path('patients/<int:id>/', views.patient),
+    path('personnel/', views.liste_du_personnel),
+    path('personnel/<int:id>/', views.détail_personnel_soignant),
 ]
