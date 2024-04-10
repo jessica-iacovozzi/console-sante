@@ -25,4 +25,5 @@ admin.site.site_title = 'Console Santé'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
+    path('soins/', include('unité_de_soins.urls'))
 ]
