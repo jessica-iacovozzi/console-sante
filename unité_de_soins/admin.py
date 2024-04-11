@@ -26,3 +26,10 @@ class PersonnelSoignant(admin.ModelAdmin):
     list_display = ['EIN', 'nom', 'prénom', 'role', 'département']
     ordering = ['nom', 'prénom']
     search_fields = ['nom__istartswith', 'prénom__istartswith']
+
+@admin.register(models.RendezVous)
+class RendezVous(admin.ModelAdmin):
+    list_display = ['patient', 'description', 'lieu', 'date', 'durée']
+    ordering = ['date', 'durée']
+    search_fields = ['lieu']
+    list_editable = ['description', 'date', 'lieu', 'durée']

@@ -8,4 +8,6 @@ urlpatterns = [
     path('patients/<int:id>/', views.patient),
     path('personnel/', views.liste_du_personnel),
     path('personnel/<int:id>/', views.détail_personnel_soignant),
+    path('rendezvous/', views.liste_de_rendez_vous),
+    path('rendezvous/<int:id>', views.détail_rendez_vous),
 ]

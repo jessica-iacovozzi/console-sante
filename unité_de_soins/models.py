@@ -82,7 +82,7 @@ class DossierMédical(models.Model):
     patient = models.OneToOneField(Patient, on_delete=models.CASCADE, unique=True)
 
     def __str__(self):
-        return self.chambre
+        return self.id_dossier
 
     class Meta:
         ordering = ['id_dossier']
@@ -119,3 +119,16 @@ class PersonnelSoignant(models.Model):
     class Meta:
         ordering = ['nom', 'prénom']
         verbose_name_plural = "Personnel soignant"
+
+class RendezVous(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='rendez_vous')
+    personnel_soignant = models.ManyToManyField(PersonnelSoignant)
+    description = models.TextField(blank=True, null=True)
+    lieu = models.CharField(max_length=255)
+    date = models.DateTimeField()
+    durée = models.DurationField()
+
+    class Meta:
+        ordering = ['date', 'durée']
+        verbose_name = 'Rendez-vous'
+        verbose_name_plural = 'Rendez-vous'

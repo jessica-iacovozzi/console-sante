@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Patient, DossierMédical, PersonnelSoignant
+from .models import Patient, DossierMédical, PersonnelSoignant, RendezVous
 
 class PatientSerializer(serializers.ModelSerializer):
     adresse = serializers.StringRelatedField()
@@ -22,3 +22,8 @@ class PersonnelSoignantSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonnelSoignant
         fields = ['prénom', 'nom', 'role', 'département', 'patients', 'nombre_de_patients']
+
+class RendezVousSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RendezVous
+        fields = ['description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']

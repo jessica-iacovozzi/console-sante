@@ -2,9 +2,8 @@ from django.shortcuts import get_object_or_404
 from django.db.models.aggregates import Count
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from .models import DossierMédical, Patient, PersonnelSoignant
-from .serializers import DossierMédicalSerializer, PatientSerializer, PersonnelSoignantSerializer
+from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
+from .serializers import DossierMédicalSerializer, PatientSerializer, PersonnelSoignantSerializer, RendezVousSerializer
 
 @api_view()
 def dossiers_médicaux(request):
@@ -42,4 +41,16 @@ def liste_du_personnel(request):
 def détail_personnel_soignant(request, id):
     soigant = get_object_or_404(PersonnelSoignant, pk=id)
     serializer = PersonnelSoignantSerializer(soigant, context={'request': request})
+    return Response(serializer.data)
+
+@api_view()
+def liste_de_rendez_vous(request):
+    queryset = RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').all()
+    serializer = RendezVousSerializer(queryset, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view()
+def détail_rendez_vous(request, id):
+    rendezvous = get_object_or_404(RendezVous, pk=id)
+    serializer = RendezVousSerializer(rendezvous, context={'request': request})
     return Response(serializer.data)
