@@ -12,34 +12,34 @@ def dossiers_médicaux(request):
     return Response(serializer.data)
 
 @api_view()
-def dossier_médical(request, id):
-    dossier = get_object_or_404(DossierMédical, pk=id)
+def dossier_médical(request, pk):
+    dossier = get_object_or_404(DossierMédical, pk=pk)
     serializer = DossierMédicalSerializer(dossier, context={'request': request})
     return Response(serializer.data)
 
 @api_view()
 def patients(request):
-    queryset = Patient.objects.select_related('adresse').all()
+    queryset = Patient.objects.prefetch_related('rendez_vous').select_related('adresse').all()
     seriallizer = PatientSerializer(queryset, many=True, context={'request': request})
     return Response(seriallizer.data)
 
 @api_view()
-def patient(request, id):
-    patient = get_object_or_404(Patient, pk=id)
+def patient(request, pk):
+    patient = get_object_or_404(Patient, pk=pk)
     serializer = PatientSerializer(patient, context={'request': request})
     return Response(serializer.data)
 
 @api_view()
 def liste_du_personnel(request):
-    queryset = PersonnelSoignant.objects.prefetch_related('patients').annotate(
+    queryset = PersonnelSoignant.objects.prefetch_related('rendezvous_set', 'patients').annotate(
         nombre_de_patients=Count('patients')
     ).all()
     serializer = PersonnelSoignantSerializer(queryset, many=True, context={'request': request})
     return Response(serializer.data)
 
 @api_view()
-def détail_personnel_soignant(request, id):
-    soigant = get_object_or_404(PersonnelSoignant, pk=id)
+def détail_personnel_soignant(request, pk):
+    soigant = get_object_or_404(PersonnelSoignant, pk=pk)
     serializer = PersonnelSoignantSerializer(soigant, context={'request': request})
     return Response(serializer.data)
 
@@ -50,7 +50,7 @@ def liste_de_rendez_vous(request):
     return Response(serializer.data)
 
 @api_view()
-def détail_rendez_vous(request, id):
-    rendezvous = get_object_or_404(RendezVous, pk=id)
+def détail_rendez_vous(request, pk):
+    rendezvous = get_object_or_404(RendezVous, pk=pk)
     serializer = RendezVousSerializer(rendezvous, context={'request': request})
     return Response(serializer.data)

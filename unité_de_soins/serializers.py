@@ -3,10 +3,11 @@ from .models import Patient, DossierMédical, PersonnelSoignant, RendezVous
 
 class PatientSerializer(serializers.ModelSerializer):
     adresse = serializers.StringRelatedField()
+    rendez_vous = serializers.HyperlinkedRelatedField(view_name='rendezvous', read_only=True, many=True)
 
     class Meta:
         model = Patient
-        fields = ['prénom', 'nom', 'adresse', 'date_de_naissance', 'ramq']
+        fields = ['prénom', 'nom', 'adresse', 'date_de_naissance', 'ramq', 'rendez_vous']
 
 class DossierMédicalSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField()
@@ -18,12 +19,16 @@ class DossierMédicalSerializer(serializers.ModelSerializer):
 class PersonnelSoignantSerializer(serializers.ModelSerializer):
     patients = serializers.StringRelatedField(many=True)
     nombre_de_patients = serializers.IntegerField(read_only=True)
+    rendezvous_set = serializers.HyperlinkedRelatedField(view_name='rendezvous', read_only=True, many=True)
 
     class Meta:
         model = PersonnelSoignant
-        fields = ['prénom', 'nom', 'role', 'département', 'patients', 'nombre_de_patients']
+        fields = ['prénom', 'nom', 'role', 'département', 'nombre_de_patients', 'patients', 'rendezvous_set']
 
 class RendezVousSerializer(serializers.ModelSerializer):
+    patient = serializers.StringRelatedField()
+    personnel_soignant = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = RendezVous
         fields = ['description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']
