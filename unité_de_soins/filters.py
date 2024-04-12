@@ -5,8 +5,5 @@ class PersonnelSoignantFilter(FilterSet):
     class Meta:
         model = PersonnelSoignant
         fields = {
-            'prénom': ['exact'],
-            'nom': ['exact'],
-            'role': ['exact'],
-            'département': ['exact', 'contains']
+            'role': ['exact']
         }
