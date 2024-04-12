@@ -34,8 +34,10 @@ class PersonnelSoignantViewSet(ModelViewSet):
     ordering_fields = ['nombre_de_patients']
 
 class RendezVousViewSet(ModelViewSet):
-    queryset = RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').all()
     serializer_class = RendezVousSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['patient', 'personnel_soignant']
     ordering_fields = ['date', 'durée']
+
+    def get_queryset(self):
+        return RendezVous.objects.filter(patient_id=self.kwargs['patient_pk'])
