@@ -1,13 +1,12 @@
 from django.urls import path
+from django.urls.conf import include
 from . import views
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('dossiers/', views.dossiers_médicaux),
-    path('dossiers/<int:pk>/', views.dossier_médical),
-    path('patients/', views.patients),
-    path('patients/<int:pk>/', views.patient),
-    path('personnel/', views.liste_du_personnel),
-    path('personnel/<int:pk>/', views.détail_personnel_soignant),
-    path('rendezvous/', views.liste_de_rendez_vous),
-    path('rendezvous/<int:pk>', views.détail_rendez_vous, name='rendezvous'),
-]
+router = DefaultRouter()
+router.register('dossiers', views.DossierMédicalViewSet)
+router.register('patients', views.PatientViewSet)
+router.register('personnel', views.PersonnelSoignantViewSet)
+router.register('rendezvous', views.RendezVousViewSet)
+
+urlpatterns = router.urls
