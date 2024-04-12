@@ -1,9 +1,15 @@
 from rest_framework import serializers
 from .models import Patient, DossierMédical, PersonnelSoignant, RendezVous
+from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 
 class PatientSerializer(serializers.ModelSerializer):
     adresse = serializers.StringRelatedField()
-    rendez_vous = serializers.HyperlinkedRelatedField(view_name='rendezvous', read_only=True, many=True)
+    rendez_vous = NestedHyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='patient-rendezvous-detail',
+        parent_lookup_kwargs={'patient_pk': 'patient__pk'}
+    )
 
     class Meta:
         model = Patient

@@ -19,5 +19,10 @@ class PersonnelSoignantViewSet(ModelViewSet):
     serializer_class = PersonnelSoignantSerializer
 
 class RendezVousViewSet(ModelViewSet):
-    queryset = RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').all()
     serializer_class = RendezVousSerializer
+
+    def get_queryset(self):
+        return RendezVous.objects.filter(patient_id=self.kwargs['patient_pk'])
+
+    def get_serializer_context(self):
+        return {'patient_id': self.kwargs['patient_pk']}

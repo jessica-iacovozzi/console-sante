@@ -10,6 +10,7 @@ psycopg = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 django-filter = "*"
+drf-nested-routers = "*"
 
 [dev-packages]
 
