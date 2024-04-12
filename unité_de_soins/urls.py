@@ -1,7 +1,8 @@
 from django.urls import path
 from django.urls.conf import include
-from . import views
 from rest_framework_nested import routers
+
+from . import views
 
 router = routers.DefaultRouter()
 router.register('dossiers', views.DossierMédicalViewSet, basename='dossiers')
@@ -12,4 +13,7 @@ router.register('rendezvous', views.RendezVousViewSet, basename='rendezvous')
 patients_router = routers.NestedDefaultRouter(router, 'patients', lookup='patient')
 patients_router.register('rendezvous', views.RendezVousViewSet, basename='patient-rendezvous')
 
-urlpatterns = router.urls + patients_router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+    path('', include(patients_router.urls)),
+]

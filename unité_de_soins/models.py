@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Adresse(models.Model):
     PROVINCE_CHOIX = {
         "NL": "Terre-Neuve-et-Labrador",

@@ -1,10 +1,13 @@
 from django.db.models.aggregates import Count
-from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.viewsets import ModelViewSet
+
 from .filters import PersonnelSoignantFilter
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
-from .serializers import DossierMédicalSerializer, PatientSerializer, PersonnelSoignantSerializer, RendezVousSerializer
+from .serializers import (DossierMédicalSerializer, PatientSerializer,
+                          PersonnelSoignantSerializer, RendezVousSerializer)
+
 
 class DossierMédicalViewSet(ModelViewSet):
     queryset = DossierMédical.objects.select_related('patient').all()
