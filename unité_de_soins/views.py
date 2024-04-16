@@ -1,4 +1,5 @@
 from django.db.models.aggregates import Count
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.viewsets import ModelViewSet
@@ -40,4 +41,7 @@ class RendezVousViewSet(ModelViewSet):
     ordering_fields = ['date', 'durée']
 
     def get_queryset(self):
-        return RendezVous.objects.filter(patient_id=self.kwargs['patient_pk'])
+        return RendezVous.objects.filter(
+            Q(personnel_soignant=self.kwargs.get('personnel_pk')) |
+            Q(patient_id=self.kwargs.get('patient_pk'))
+        )

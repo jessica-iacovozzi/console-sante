@@ -34,10 +34,16 @@ class DossierMédicalSerializer(serializers.ModelSerializer):
 class PersonnelSoignantSerializer(serializers.ModelSerializer):
     patients = serializers.StringRelatedField(many=True)
     nombre_de_patients = serializers.IntegerField(read_only=True)
+    rendez_vous = serializers.SerializerMethodField()
+
+    def get_rendez_vous(self, obj):
+        rendez_vous_qs = RendezVous.objects.filter(personnel_soignant=obj)
+        rendez_vous_data = RendezVousSerializer(rendez_vous_qs, many=True).data
+        return rendez_vous_data
 
     class Meta:
         model = PersonnelSoignant
-        fields = ['prénom', 'nom', 'role', 'département', 'nombre_de_patients', 'patients']
+        fields = ['prénom', 'nom', 'role', 'département', 'nombre_de_patients', 'patients', 'rendez_vous']
 
 class RendezVousSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField()
