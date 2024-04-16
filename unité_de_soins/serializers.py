@@ -51,7 +51,7 @@ class RendezVousSerializer(serializers.ModelSerializer):
 
     def get_date(self, obj):
         activate('fr')
-        return formats.date_format(obj.date, format='j F, Hh%i')
+        return formats.date_format(obj.date, format='j F, H:i')
 
     def get_durée(self, obj):
         activate('fr')
