@@ -18,14 +18,14 @@ class DossierMédicalViewSet(ModelViewSet):
     ordering_fields = ['dernier_changement']
 
 class PatientViewSet(ModelViewSet):
-    queryset = Patient.objects.prefetch_related('rendez_vous').select_related('adresse').all()
+    queryset = Patient.objects.prefetch_related('rendez_vous__personnel_soignant').select_related('adresse').all()
     serializer_class = PatientSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['nom', 'prénom', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'ramq']
     ordering_fields = ['date_de_naissance']
 
 class PersonnelSoignantViewSet(ModelViewSet):
-    queryset = PersonnelSoignant.objects.prefetch_related('patients').annotate(
+    queryset = PersonnelSoignant.objects.prefetch_related('patients', 'rendez_vous__patient', 'rendez_vous__personnel_soignant').annotate(
         nombre_de_patients=Count('patients')
     ).all()
     serializer_class = PersonnelSoignantSerializer

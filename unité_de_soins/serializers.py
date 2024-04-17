@@ -33,7 +33,6 @@ class RendezVousSerializer(serializers.ModelSerializer):
         return formats.date_format(obj.date, format='j F, H:i')
 
     def get_durée(self, obj):
-        activate('fr')
         hours, minutes = divmod(obj.durée.seconds // 60, 60)
         formatted_duration = ""
         if hours:
