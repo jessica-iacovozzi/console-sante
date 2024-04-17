@@ -6,9 +6,21 @@ from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
 
 
+class SimplePatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ['prénom', 'nom', 'ramq']
+
+class SimplePersonnelSoignantSerializer(serializers.ModelSerializer):
+    fonction = serializers.CharField(source='get_role_display', read_only=True)
+
+    class Meta:
+        model = PersonnelSoignant
+        fields = ['prénom', 'nom', 'fonction']
+
 class RendezVousSerializer(serializers.ModelSerializer):
-    patient = serializers.StringRelatedField()
-    personnel_soignant = serializers.StringRelatedField(many=True)
+    patient = SimplePatientSerializer()
+    personnel_soignant = SimplePersonnelSoignantSerializer(many=True)
     date = serializers.SerializerMethodField()
     durée = serializers.SerializerMethodField()
 
@@ -36,7 +48,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ['prénom', 'nom', 'adresse', 'date_de_naissance', 'ramq', 'rendez_vous']
+        fields = ['prénom', 'nom', 'adresse', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'télécopieur', 'date_de_naissance', 'ramq', 'rendez_vous']
 
 class DossierMédicalSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField()
@@ -57,4 +69,4 @@ class PersonnelSoignantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PersonnelSoignant
-        fields = ['prénom', 'nom', 'role', 'département', 'nombre_de_patients', 'patients', 'rendez_vous']
+        fields = ['EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'nombre_de_patients', 'patients', 'rendez_vous']
