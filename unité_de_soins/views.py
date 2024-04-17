@@ -11,6 +11,7 @@ from .serializers import (DossierMédicalSerializer, PatientSerializer,
 
 
 class DossierMédicalViewSet(ModelViewSet):
+    http_method_names = ['get']
     queryset = DossierMédical.objects.select_related('patient').all()
     serializer_class = DossierMédicalSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -18,6 +19,7 @@ class DossierMédicalViewSet(ModelViewSet):
     ordering_fields = ['dernier_changement']
 
 class PatientViewSet(ModelViewSet):
+    http_method_names = ['get']
     queryset = Patient.objects.prefetch_related('rendez_vous__personnel_soignant').select_related('adresse').all()
     serializer_class = PatientSerializer
     filter_backends = [SearchFilter, OrderingFilter]
@@ -25,6 +27,7 @@ class PatientViewSet(ModelViewSet):
     ordering_fields = ['date_de_naissance']
 
 class PersonnelSoignantViewSet(ModelViewSet):
+    http_method_names = ['get']
     queryset = PersonnelSoignant.objects.prefetch_related('patients', 'rendez_vous__patient', 'rendez_vous__personnel_soignant').annotate(
         nombre_de_patients=Count('patients')
     ).all()
@@ -35,6 +38,7 @@ class PersonnelSoignantViewSet(ModelViewSet):
     ordering_fields = ['nombre_de_patients']
 
 class RendezVousViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['patient', 'personnel_soignant']
     ordering_fields = ['date', 'durée']
@@ -48,6 +52,8 @@ class RendezVousViewSet(ModelViewSet):
         return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').all()
 
 class PatientRendezVousViewSet(ModelViewSet):
+    http_method_names = ['get', 'patch', 'delete']
+    serializer_class = RendezVousSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['personnel_soignant']
 
@@ -57,6 +63,8 @@ class PatientRendezVousViewSet(ModelViewSet):
         )
 
 class PersonnelRendezVousViewSet(ModelViewSet):
+    http_method_names = ['get', 'patch', 'delete']
+    serializer_class = RendezVousSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['patient']
 
