@@ -123,7 +123,7 @@ class PersonnelSoignant(models.Model):
 
 class RendezVous(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='rendez_vous')
-    personnel_soignant = models.ManyToManyField(PersonnelSoignant)
+    personnel_soignant = models.ManyToManyField(PersonnelSoignant, related_name='rendez_vous')
     description = models.TextField(blank=True, null=True)
     lieu = models.CharField(max_length=255)
     date = models.DateTimeField()
