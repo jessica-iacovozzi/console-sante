@@ -1,7 +1,6 @@
 from django.utils import formats
 from django.utils.translation import activate
 from rest_framework import serializers
-from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
 
@@ -69,3 +68,8 @@ class PersonnelSoignantSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonnelSoignant
         fields = ['EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'nombre_de_patients', 'patients', 'rendez_vous']
+
+class CreateRendezVousSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RendezVous
+        fields = ['description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']
