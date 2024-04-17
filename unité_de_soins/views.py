@@ -42,8 +42,25 @@ class RendezVousViewSet(ModelViewSet):
 
     def get_queryset(self):
         return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').all()
-    # def get_queryset(self):
-    #     return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').filter(
-    #         Q(personnel_soignant=self.kwargs.get('personnel_pk')) |
-    #         Q(patient_id=self.kwargs.get('patient_pk'))
-    #     )
+
+class PatientRendezVousViewSet(ModelViewSet):
+    serializer_class = RendezVousSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['personnel_soignant']
+    ordering_fields = ['date', 'durée']
+
+    def get_queryset(self):
+        return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').filter(
+            patient_id=self.kwargs['patient_pk']
+        )
+
+class PersonnelRendezVousViewSet(ModelViewSet):
+    serializer_class = RendezVousSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['patient']
+    ordering_fields = ['date', 'durée']
+
+    def get_queryset(self):
+        return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').filter(
+            personnel_soignant=self.kwargs['personnel_pk']
+        )

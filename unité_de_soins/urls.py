@@ -11,10 +11,10 @@ router.register('personnel', views.PersonnelSoignantViewSet, basename='personnel
 router.register('rendezvous', views.RendezVousViewSet, basename='rendezvous')
 
 patients_router = routers.NestedDefaultRouter(router, 'patients', lookup='patient')
-patients_router.register('rendezvous', views.RendezVousViewSet, basename='patient-rendezvous')
+patients_router.register('rendezvous', views.PatientRendezVousViewSet, basename='patient-rendezvous')
 
 personnel_router = routers.NestedDefaultRouter(router, 'personnel', lookup='personnel')
-personnel_router.register('rendezvous', views.RendezVousViewSet, basename='personnel-rendezvous')
+personnel_router.register('rendezvous', views.PersonnelRendezVousViewSet, basename='personnel-rendezvous')
 
 urlpatterns = [
     path('', include(router.urls)),
