@@ -21,7 +21,7 @@ class DossierMédicalViewSet(ModelViewSet):
 
 class PatientViewSet(ModelViewSet):
     http_method_names = ['get']
-    queryset = Patient.objects.prefetch_related('rendez_vous__personnel_soignant').select_related('adresse').all()
+    queryset = Patient.objects.prefetch_related('rendez_vous__personnel_soignant', 'rendez_vous__personnel_soignant__user').select_related('adresse').all()
     serializer_class = PatientSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['nom', 'prénom', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'ramq']
@@ -40,8 +40,8 @@ class PersonnelSoignantViewSet(ModelViewSet):
 
 class RendezVousViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
+    queryset = RendezVous.objects.prefetch_related('personnel_soignant', 'personnel_soignant__user').select_related('patient').all()
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['patient', 'personnel_soignant']
     ordering_fields = ['date', 'durée']
 
     def get_serializer_class(self):
@@ -49,17 +49,13 @@ class RendezVousViewSet(ModelViewSet):
             return CreateRendezVousSerializer
         return RendezVousSerializer
 
-    def get_queryset(self):
-        return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').all()
-
 class PatientRendezVousViewSet(ModelViewSet):
     http_method_names = ['get', 'patch', 'delete']
     serializer_class = RendezVousSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['personnel_soignant']
 
     def get_queryset(self):
-        return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').filter(
+        return RendezVous.objects.prefetch_related('personnel_soignant', 'personnel_soignant__user').select_related('patient').filter(
             patient_id=self.kwargs['patient_pk']
         )
 
@@ -70,6 +66,6 @@ class PersonnelRendezVousViewSet(ModelViewSet):
     filterset_fields = ['patient']
 
     def get_queryset(self):
-        return RendezVous.objects.prefetch_related('personnel_soignant').select_related('patient').filter(
+        return RendezVous.objects.prefetch_related('personnel_soignant', 'personnel_soignant__user').select_related('patient').filter(
             personnel_soignant=self.kwargs['personnel_pk']
         )
