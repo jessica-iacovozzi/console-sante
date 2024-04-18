@@ -25,7 +25,7 @@ class RendezVousSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RendezVous
-        fields = ['description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']
+        fields = ['id', 'description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']
 
     def get_date(self, obj):
         activate('fr')
@@ -40,13 +40,33 @@ class RendezVousSerializer(serializers.ModelSerializer):
             formatted_duration += f"{minutes}min"
         return formatted_duration.strip()
 
+class CreateOrUpdateRendezVousSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RendezVous
+        fields = ['description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']
+
+class CreateOrUpdatePatientRendezVousSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RendezVous
+        fields = ['description', 'lieu', 'date', 'durée', 'personnel_soignant']
+
+class CreateOrUpdatePersonnelRendezVousSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RendezVous
+        fields = ['description', 'lieu', 'date', 'durée', 'patient']
+
 class PatientSerializer(serializers.ModelSerializer):
     adresse = serializers.StringRelatedField()
     rendez_vous = RendezVousSerializer(many=True)
 
     class Meta:
         model = Patient
-        fields = ['prénom', 'nom', 'adresse', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'télécopieur', 'date_de_naissance', 'ramq', 'rendez_vous']
+        fields = ['id', 'prénom', 'nom', 'adresse', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'télécopieur', 'date_de_naissance', 'ramq', 'rendez_vous']
+
+class CreateOrUpdatePatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ['prénom', 'nom', 'adresse', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'télécopieur', 'date_de_naissance', 'ramq']
 
 class DossierMédicalSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField()
@@ -54,7 +74,7 @@ class DossierMédicalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DossierMédical
-        fields = ['patient', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'taille', 'poids', 'dernier_changement']
+        fields = ['id', 'patient', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'taille', 'poids', 'dernier_changement']
 
     def get_dernier_changement(self, obj):
         activate('fr')
@@ -67,9 +87,9 @@ class PersonnelSoignantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PersonnelSoignant
-        fields = ['EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'nombre_de_patients', 'patients', 'rendez_vous']
+        fields = ['id', 'EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'nombre_de_patients', 'patients', 'rendez_vous']
 
-class CreateRendezVousSerializer(serializers.ModelSerializer):
+class CreateOrUpdatePersonnelSoignantSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RendezVous
-        fields = ['description', 'lieu', 'date', 'durée', 'patient', 'personnel_soignant']
+        model = PersonnelSoignant
+        fields = ['EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'patients']
