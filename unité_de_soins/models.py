@@ -1,4 +1,7 @@
 from django.db import models
+from django.conf import settings
+
+from django.contrib import admin
 
 
 class Adresse(models.Model):
@@ -106,19 +109,27 @@ class PersonnelSoignant(models.Model):
     }
 
     EIN = models.CharField(max_length=255, unique=True)
-    nom = models.CharField(max_length=50)
-    prénom = models.CharField(max_length=50)
     photo = models.ImageField()
-    courriel = models.EmailField(unique=True, max_length=254)
     role = models.CharField(max_length=4, choices=ROLES)
     département = models.CharField(max_length=255)
     patients = models.ManyToManyField(Patient)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.prénom} {self.nom}'
+        return f'{self.user.first_name} {self.user.last_name}'
+
+    @admin.display(ordering='user__first_name')
+    def prénom(self):
+        return self.user.first_name
+
+    @admin.display(ordering='user__last_name')
+    def nom(self):
+        return self.user.last_name
+
+    def courriel(self):
+        return self.user.email
 
     class Meta:
-        ordering = ['nom', 'prénom']
         verbose_name_plural = "Personnel soignant"
 
 class RendezVous(models.Model):

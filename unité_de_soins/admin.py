@@ -26,8 +26,9 @@ class DossierMédicalAdmin(admin.ModelAdmin):
 @admin.register(models.PersonnelSoignant)
 class PersonnelSoignant(admin.ModelAdmin):
     list_display = ['EIN', 'nom', 'prénom', 'role', 'département']
-    ordering = ['nom', 'prénom']
-    search_fields = ['nom__istartswith', 'prénom__istartswith']
+    list_select_related = ['user']
+    ordering = ['user__last_name', 'user__first_name']
+    search_fields = ['user__last_name__istartswith', 'user__first_name__istartswith']
 
 @admin.register(models.RendezVous)
 class RendezVous(admin.ModelAdmin):

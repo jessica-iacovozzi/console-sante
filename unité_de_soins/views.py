@@ -6,8 +6,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from .filters import PersonnelSoignantFilter
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
-from .serializers import (DossierMédicalSerializer, PatientSerializer,
-                          PersonnelSoignantSerializer, RendezVousSerializer, CreateRendezVousSerializer)
+from .serializers import (CreateRendezVousSerializer, DossierMédicalSerializer,
+                          PatientSerializer, PersonnelSoignantSerializer,
+                          RendezVousSerializer)
 
 
 class DossierMédicalViewSet(ModelViewSet):
@@ -28,13 +29,13 @@ class PatientViewSet(ModelViewSet):
 
 class PersonnelSoignantViewSet(ModelViewSet):
     http_method_names = ['get']
-    queryset = PersonnelSoignant.objects.prefetch_related('patients', 'rendez_vous__patient', 'rendez_vous__personnel_soignant').annotate(
+    queryset = PersonnelSoignant.objects.prefetch_related('patients', 'rendez_vous__patient', 'rendez_vous__personnel_soignant', 'rendez_vous__personnel_soignant__user').select_related('user').annotate(
         nombre_de_patients=Count('patients')
     ).all()
     serializer_class = PersonnelSoignantSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = PersonnelSoignantFilter
-    search_fields = ['nom', 'prénom', 'département']
+    search_fields = ['user__first_name', 'user__last_name', 'département']
     ordering_fields = ['nombre_de_patients']
 
 class RendezVousViewSet(ModelViewSet):
