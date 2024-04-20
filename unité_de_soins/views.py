@@ -1,17 +1,19 @@
-from django.db.models import Q
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.response import Response
-from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from .filters import PersonnelSoignantFilter
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
-from .serializers import (CreateOrUpdatePatientRendezVousSerializer, CreateOrUpdatePatientSerializer, CreateOrUpdatePersonnelRendezVousSerializer,
-                          CreateOrUpdateRendezVousSerializer, DossierMédicalSerializer,
-                          PatientSerializer, PersonnelSoignantSerializer,
-                          RendezVousSerializer, CreateOrUpdatePersonnelSoignantSerializer)
+from .serializers import (CreateOrUpdatePatientRendezVousSerializer,
+                          CreateOrUpdatePatientSerializer,
+                          CreateOrUpdatePersonnelRendezVousSerializer,
+                          CreateOrUpdatePersonnelSoignantSerializer,
+                          CreateOrUpdateRendezVousSerializer,
+                          DossierMédicalSerializer, PatientSerializer,
+                          PersonnelSoignantSerializer, RendezVousSerializer)
 
 
 class DossierMédicalViewSet(ModelViewSet):
@@ -46,11 +48,17 @@ class PersonnelSoignantViewSet(ModelViewSet):
             return CreateOrUpdatePersonnelSoignantSerializer
         return PersonnelSoignantSerializer
 
-    @action(detail=False)
+    @action(detail=False, methods=['GET', 'PUT'])
     def me(self, request):
-        personnel = PersonnelSoignant.objects.get(user_id=request.user.id)
-        serializer = PersonnelSoignantSerializer(personnel)
-        return Response(serializer.data)
+        (personnel, created) = PersonnelSoignant.objects.get_or_create(user_id=request.user.id)
+        if request.method == 'GET':
+            serializer = PersonnelSoignantSerializer(personnel)
+            return Response(serializer.data)
+        elif request.method == 'PUT':
+            serializer = CreateOrUpdatePersonnelSoignantSerializer(personnel, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
 
 class RendezVousViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']

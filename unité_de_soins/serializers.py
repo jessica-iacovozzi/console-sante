@@ -91,7 +91,7 @@ class PersonnelSoignantSerializer(serializers.ModelSerializer):
         fields = ['id', 'EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'nombre_de_patients', 'patients', 'rendez_vous']
 
 class CreateOrUpdatePersonnelSoignantSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
+    user_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = PersonnelSoignant
