@@ -69,13 +69,20 @@ class CreateOrUpdatePatientSerializer(serializers.ModelSerializer):
         model = Patient
         fields = ['prénom', 'nom', 'adresse', 'courriel', 'téléphone_maison', 'téléphone_cellulaire', 'télécopieur', 'date_de_naissance', 'ramq']
 
+class CreateDossierMédicalSerializer(serializers.ModelSerializer):
+    patient_id = serializers.IntegerField()
+
+    class Meta:
+        model = DossierMédical
+        fields = ['patient_id', 'id_dossier', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'taille', 'poids']
+
 class DossierMédicalSerializer(serializers.ModelSerializer):
     patient = serializers.StringRelatedField()
     dernier_changement = serializers.SerializerMethodField()
 
     class Meta:
         model = DossierMédical
-        fields = ['id', 'patient', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'taille', 'poids', 'dernier_changement']
+        fields = ['id_dossier', 'patient', 'incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'taille', 'poids', 'dernier_changement']
 
     def get_dernier_changement(self, obj):
         activate('fr')
