@@ -29,6 +29,7 @@ class PersonnelSoignant(admin.ModelAdmin):
     list_select_related = ['user']
     ordering = ['user__last_name', 'user__first_name']
     search_fields = ['user__last_name__istartswith', 'user__first_name__istartswith']
+    autocomplete_fields = ['patients', 'user']
 
 @admin.register(models.RendezVous)
 class RendezVous(admin.ModelAdmin):
@@ -36,3 +37,4 @@ class RendezVous(admin.ModelAdmin):
     ordering = ['date', 'durée']
     search_fields = ['lieu']
     list_editable = ['description', 'date', 'lieu', 'durée']
+    autocomplete_fields = ['patient', 'personnel_soignant']
