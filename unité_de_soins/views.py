@@ -1,8 +1,10 @@
 from django.db.models import Q
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 
 from .filters import PersonnelSoignantFilter
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
@@ -43,6 +45,12 @@ class PersonnelSoignantViewSet(ModelViewSet):
         if self.request.method == 'POST' or self.request.method == 'PUT':
             return CreateOrUpdatePersonnelSoignantSerializer
         return PersonnelSoignantSerializer
+
+    @action(detail=False)
+    def me(self, request):
+        personnel = PersonnelSoignant.objects.get(user_id=request.user.id)
+        serializer = PersonnelSoignantSerializer(personnel)
+        return Response(serializer.data)
 
 class RendezVousViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']

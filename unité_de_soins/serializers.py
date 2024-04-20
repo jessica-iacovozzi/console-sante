@@ -1,6 +1,7 @@
 from django.utils import formats
 from django.utils.translation import activate
 from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 
 from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
 
@@ -90,6 +91,12 @@ class PersonnelSoignantSerializer(serializers.ModelSerializer):
         fields = ['id', 'EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'nombre_de_patients', 'patients', 'rendez_vous']
 
 class CreateOrUpdatePersonnelSoignantSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField()
+
     class Meta:
         model = PersonnelSoignant
-        fields = ['EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'patients']
+        fields = ['EIN', 'prénom', 'nom', 'role', 'département', 'courriel', 'patients', 'user_id']
+
+class UserCreateSerializer(BaseUserCreateSerializer):
+    class Meta(BaseUserCreateSerializer.Meta):
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name']
