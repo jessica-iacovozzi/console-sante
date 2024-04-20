@@ -15,6 +15,7 @@ patients_router.register('rendezvous', views.PatientRendezVousViewSet, basename=
 
 personnel_router = routers.NestedDefaultRouter(router, 'personnel', lookup='personnel')
 personnel_router.register('rendezvous', views.PersonnelRendezVousViewSet, basename='personnel-rendezvous')
+personnel_router.register('photos', views.PersonnelSoignantPhotosViewSet, basename='personnel-photos')
 
 urlpatterns = [
     path('', include(router.urls)),

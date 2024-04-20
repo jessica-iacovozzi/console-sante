@@ -7,8 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .filters import PersonnelSoignantFilter
-from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous
-from .permissions import IsAdminOrReadOnly
+from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous, PersonnelSoignantPhotos
 from .serializers import (CreateDossierMédicalSerializer,
                           CreateOrUpdatePatientRendezVousSerializer,
                           CreateOrUpdatePatientSerializer,
@@ -16,6 +15,7 @@ from .serializers import (CreateDossierMédicalSerializer,
                           CreateOrUpdatePersonnelSoignantSerializer,
                           CreateOrUpdateRendezVousSerializer,
                           DossierMédicalSerializer, PatientSerializer,
+                          PersonnelSoignantPhotosSerializer,
                           PersonnelSoignantSerializer, RendezVousSerializer)
 
 
@@ -44,7 +44,7 @@ class PatientViewSet(ModelViewSet):
         return PatientSerializer
 
 class PersonnelSoignantViewSet(ModelViewSet):
-    queryset = PersonnelSoignant.objects.prefetch_related('patients', 'rendez_vous__patient', 'rendez_vous__personnel_soignant', 'rendez_vous__personnel_soignant__user').select_related('user').annotate(
+    queryset = PersonnelSoignant.objects.prefetch_related('patients', 'photos', 'rendez_vous__patient', 'rendez_vous__personnel_soignant', 'rendez_vous__personnel_soignant__user').select_related('user').annotate(
         nombre_de_patients=Count('patients')
     ).all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -69,6 +69,15 @@ class PersonnelSoignantViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+
+class PersonnelSoignantPhotosViewSet(ModelViewSet):
+    serializer_class = PersonnelSoignantPhotosSerializer
+
+    def get_serializer_context(self):
+        return {'personnel_soignant_id': self.kwargs['personnel_pk']}
+
+    def get_queryset(self):
+        return PersonnelSoignantPhotos.objects.filter(personnel_soignant_id=self.kwargs['personnel_pk'])
 
 class RendezVousViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']

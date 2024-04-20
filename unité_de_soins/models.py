@@ -109,7 +109,6 @@ class PersonnelSoignant(models.Model):
     }
 
     EIN = models.CharField(max_length=255, unique=True)
-    photo = models.ImageField()
     role = models.CharField(max_length=4, choices=ROLES)
     département = models.CharField(max_length=255)
     patients = models.ManyToManyField(Patient)
@@ -131,6 +130,10 @@ class PersonnelSoignant(models.Model):
 
     class Meta:
         verbose_name_plural = "Personnel soignant"
+
+class PersonnelSoignantPhotos(models.Model):
+    personnel_soignant = models.ForeignKey(PersonnelSoignant, on_delete=models.CASCADE, related_name='photos')
+    photos = models.ImageField(upload_to='unité_de_soins/photos')
 
 class RendezVous(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='rendez_vous')
