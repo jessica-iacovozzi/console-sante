@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .filters import PersonnelSoignantFilter
-from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous, PersonnelSoignantPhotos
+from .models import DossierMédical, Patient, PersonnelSoignant, RendezVous, PersonnelSoignantPhoto
 from .serializers import (CreateDossierMédicalSerializer,
                           CreateOrUpdatePatientRendezVousSerializer,
                           CreateOrUpdatePatientSerializer,
@@ -15,7 +15,7 @@ from .serializers import (CreateDossierMédicalSerializer,
                           CreateOrUpdatePersonnelSoignantSerializer,
                           CreateOrUpdateRendezVousSerializer,
                           DossierMédicalSerializer, PatientSerializer,
-                          PersonnelSoignantPhotosSerializer,
+                          PersonnelSoignantPhotoSerializer,
                           PersonnelSoignantSerializer, RendezVousSerializer)
 
 
@@ -70,14 +70,14 @@ class PersonnelSoignantViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data)
 
-class PersonnelSoignantPhotosViewSet(ModelViewSet):
-    serializer_class = PersonnelSoignantPhotosSerializer
+class PersonnelSoignantPhotoViewSet(ModelViewSet):
+    serializer_class = PersonnelSoignantPhotoSerializer
 
     def get_serializer_context(self):
         return {'personnel_soignant_id': self.kwargs['personnel_pk']}
 
     def get_queryset(self):
-        return PersonnelSoignantPhotos.objects.filter(personnel_soignant_id=self.kwargs['personnel_pk'])
+        return PersonnelSoignantPhoto.objects.filter(personnel_soignant_id=self.kwargs['personnel_pk'])
 
 class RendezVousViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']

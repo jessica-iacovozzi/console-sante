@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from . import models
 
@@ -23,6 +24,15 @@ class DossierMédicalAdmin(admin.ModelAdmin):
     search_fields = ['id_dossier__istartswith']
     list_editable = ['incontinence', 'détection_chute', 'amnamèse_ic', 'fréquence_cardiaque', 'saturation', 'pression_artérielle', 'température_corporelle', 'fréquence_respiratoire', 'adhérence_rx', 'poids', 'taille']
 
+class PersonnelSoignantPhotoInline(admin.TabularInline):
+    model = models.PersonnelSoignantPhoto
+    readonly_fields = ['thumbnail']
+
+    def thumbnail(self, instance):
+        if instance.photo.name != '':
+            return format_html(f'<img src="{instance.photo.url}" class="thumbnail" />')
+        return ''
+
 @admin.register(models.PersonnelSoignant)
 class PersonnelSoignant(admin.ModelAdmin):
     list_display = ['EIN', 'nom', 'prénom', 'role', 'département']
@@ -30,6 +40,12 @@ class PersonnelSoignant(admin.ModelAdmin):
     ordering = ['user__last_name', 'user__first_name']
     search_fields = ['user__last_name__istartswith', 'user__first_name__istartswith']
     autocomplete_fields = ['patients', 'user']
+    inlines = [PersonnelSoignantPhotoInline]
+
+    class Media:
+        css = {
+            'all': ['unité_de_soins/styles.css']
+        }
 
 @admin.register(models.RendezVous)
 class RendezVous(admin.ModelAdmin):

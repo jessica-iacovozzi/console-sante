@@ -4,7 +4,7 @@ from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from rest_framework import serializers
 
 from .models import (DossierMédical, Patient, PersonnelSoignant,
-                     PersonnelSoignantPhotos, RendezVous)
+                     PersonnelSoignantPhoto, RendezVous)
 
 
 class SimplePatientSerializer(serializers.ModelSerializer):
@@ -89,20 +89,20 @@ class DossierMédicalSerializer(serializers.ModelSerializer):
         activate('fr')
         return formats.date_format(obj.dernier_changement, format='j F, H:i')
 
-class PersonnelSoignantPhotosSerializer(serializers.ModelSerializer):
+class PersonnelSoignantPhotoSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
-        personnel_photo = self.context['personnel_soignant_id']
-        return PersonnelSoignantPhotos.objects.create(personnel_soignant_id=personnel_photo, **validated_data)
+        personnel_soignant_id = self.context['personnel_soignant_id']
+        return PersonnelSoignantPhoto.objects.create(personnel_soignant_id=personnel_soignant_id, **validated_data)
 
     class Meta:
-        model = PersonnelSoignantPhotos
-        fields = ['id', 'photos']
+        model = PersonnelSoignantPhoto
+        fields = ['id', 'photo']
 
 class PersonnelSoignantSerializer(serializers.ModelSerializer):
     patients = serializers.StringRelatedField(many=True)
     nombre_de_patients = serializers.IntegerField(read_only=True)
     rendez_vous = RendezVousSerializer(many=True)
-    photos = PersonnelSoignantPhotosSerializer(many=True)
+    photos = PersonnelSoignantPhotoSerializer(many=True, read_only=True)
 
     class Meta:
         model = PersonnelSoignant

@@ -131,9 +131,9 @@ class PersonnelSoignant(models.Model):
     class Meta:
         verbose_name_plural = "Personnel soignant"
 
-class PersonnelSoignantPhotos(models.Model):
+class PersonnelSoignantPhoto(models.Model):
     personnel_soignant = models.ForeignKey(PersonnelSoignant, on_delete=models.CASCADE, related_name='photos')
-    photos = models.ImageField(upload_to='unité_de_soins/photos')
+    photo = models.ImageField(upload_to='unité_de_soins/photos')
 
 class RendezVous(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='rendez_vous')
