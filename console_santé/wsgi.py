@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'console_santé.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'console_santé.settings.dev')
 
 application = get_wsgi_application()

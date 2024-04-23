@@ -14,6 +14,7 @@ drf-nested-routers = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 pillow = "*"
+whitenoise = "*"
 
 [dev-packages]
 pytest = "*"
