@@ -16,6 +16,9 @@ djangorestframework-simplejwt = "*"
 pillow = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-django = "*"
+model-bakery = "*"
 
 [requires]
 python_version = "3.12"
