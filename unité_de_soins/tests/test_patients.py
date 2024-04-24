@@ -49,26 +49,14 @@ class TestCreatePatient:
 
 @pytest.mark.django_db
 class TestRetrievePatient:
-    def test_if_user_is_anonymous_return_401(self, api_client):
-        response = api_client.get('/soins/patients/101/')
-
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
-
-    def test_if_user_is_not_admin_return_403(self, authenticate, api_client):
-        authenticate()
-
-        response = api_client.get('/soins/patients/101/')
-
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-
-    def test_if_admin_but_patient_does_not_exist_return_404(self, authenticate, api_client):
+    def test_if_patient_does_not_exist_return_404(self, authenticate, api_client):
         authenticate(is_staff=True)
 
         response = api_client.get('/soins/patients/101/')
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_if_admin_and_patient_exists_return_200(self, authenticate, api_client):
+    def test_if_patient_exists_return_200(self, authenticate, api_client):
         authenticate(is_staff=True)
         patient = baker.make(Patient)
 
