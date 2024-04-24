@@ -10,7 +10,7 @@ admin.site.index_title = 'Administration'
 admin.site.site_title = 'Console Santé'
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html')),
+    path('', TemplateView.as_view(template_name='unité_de_soins/index.html')),
     path('admin/', admin.site.urls),
     path('soins/', include('unité_de_soins.urls')),
     path('auth/', include('djoser.urls')),
