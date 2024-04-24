@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  color: teal;
+  margin-top: 2rem;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.button {
+  text-decoration: none;
+  background-color: teal;
+  color: whitesmoke;
+  padding: 12px;
+  border-radius: 10px;
+  width: fit-content;
+}
